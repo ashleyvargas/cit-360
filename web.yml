@@ -22,7 +22,7 @@
       become: yes
       command: setenforce 0
 
-    - name: Install EPEL repo
+    - name: Install EPEL
       become: yes
       yum: name=epel-release update_cache=yes state=present
 
@@ -33,7 +33,7 @@
 
     - name: Install composer
       become: yes
-      shell: get -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+      shell: curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
     - name: Nginx configuration
       become: yes
@@ -47,18 +47,14 @@
       template: src=web/vhost.conf.j2 dest=/etc/nginx/conf.d/{{ service_name }}.conf mode=0644
       register: vhost_conf
 
-# Moved up from bw Check directory / Update composer (73, 77)
-    - name: Unarchive web/curriculum
+    - name: Move files from /web to /etc after unarchive (1)
       become: yes
-      unarchive: src=web/{{ service_name }}.tgz dest="{{ service_dir }}" mode=0755
-
-    - name: Move files from /web to /etc after unarchive
       template: src=web/php.ini.j2 dest=/etc/php.ini mode=0644
       register: php_conf
 
-    - name: Move files from /web to /etc after unarchive
+    - name: Move files from /web to /etc after unarchive (2)
       become: yes
-      copy: src=web/php-fpm-web.conf dest=/etc/php-fpm.d/www.conf mode=0644
+      copy: src=web/php-fpm-web.conf dest=/etc/php-fpm.d/www.conf mode=0744
       register: php_fpm_conf
 
     - name: Restart nginx
@@ -68,23 +64,29 @@
 
 #**
     - name: Restart php
+      become: yes
       service: name=php-fpm state=restarted enabled=yes
       when: nginx_install|changed or php_conf|changed or php_fpm_conf|changed
 
     - name: Check directory for file
       become: yes
-      file: path="{{ service_dir }}" state=file
+      file: path="{{ service_dir }}" state=directory
+
+    - name: Unarchive web/curriculum
+      become: yes
+      unarchive: src=web/{{ service_name }}.tgz dest="{{ service_dir }}" mode=0755
 
     - name: Update composer
       become: yes
-      command: /usr/local/bin/composer update chdir={{ service_dir }}
+      command: /usr/local/bin/composer update chdir="{{ service_dir }}"
 
     - name: Recurrsively sets permissions to all files
       become: yes
-      command: chmod -R 0644 storage chdir="{{ service_dir }}"
+      shell: chdir="{{ service_dir }}" mode=0755
+      #command: chmod -R 0644 storage chdir="{{ service_dir }}"
 
-# look up "."
     - name: Recurrsively sets owner to all files
+      become: yes
       command: chown -R nginx:nginx . chdir="{{ service_dir }}"
 
     - name: Move env file to /.env

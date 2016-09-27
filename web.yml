@@ -1,17 +1,17 @@
 ---
 - hosts: web
-  vars:
-    db_password: password
+  vars: 
     server_name: curriculum
     service_name: curriculum
     service_version: 1.0
-    app_key: QujjaJs3fxwtnTl7FiqhEEn1ACkf7YZW
     app_env: test
     db_host: localhost
     db_database: curriculum
     db_username: curriculum
     db_port: 3306
     service_dir: /usr/share/nginx/{{ service_name }}
+  vars_files: 
+    - secrets.yml
   tasks:
     - name: change selinux mode to permissive
       become: yes

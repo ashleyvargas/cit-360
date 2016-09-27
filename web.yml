@@ -33,7 +33,7 @@
 
     - name: Install composer
       become: yes
-      shell: curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+      shell: get_url -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
     - name: Nginx configuration
       become: yes
@@ -87,7 +87,8 @@
 
     - name: Recurrsively sets owner to all files
       become: yes
-      command: chown -R nginx:nginx . chdir="{{ service_dir }}"
+      file: path="{{ service_dir }}" owner=nginx recurse=yes state=directory
+      #command: chown -R nginx:nginx . chdir="{{ service_dir }}"
 
     - name: Move env file to /.env
       become: yes

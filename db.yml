@@ -1,7 +1,9 @@
 ---
 - hosts: db
   vars:
-    db_password: password
+ #   db_password: password
+  vars_files: 
+    - secrets.yml
   tasks:
 
     - name: Copy MariaDB file remote to local

@@ -1,14 +1,3 @@
-#variable "public_key_path" {
-#Example: ~/.ssh/terraform.pub
-#}
-
-#variable "key_name" {
-#  description = "Desired name of AWS key pair"
-#}
-
-
-
-# Add your VPC ID to default below
 variable "vpc_id" {
   type = "string"
   description = "VPC ID for usage throughout the build process"
@@ -120,6 +109,10 @@ resource "aws_nat_gateway" "gw" {
     allocation_id = "${aws_eip.elastic_ip.id}"
     subnet_id = "${aws_subnet.private_subnet_a.id}"
     depends_on = ["aws_internet_gateway.gw"]
+
+    tags {
+    Name = "nat.gw"
+    }
 }
 
 

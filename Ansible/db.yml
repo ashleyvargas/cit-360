@@ -14,17 +14,17 @@
       become: yes
       yum: name=MariaDB-server,MariaDB-client update_cache=yes state=present
 
-    - name: Start MariaDB service
-      become: yes
-      service: name=mariadb state=started enabled=yes
+#    - name: Start MariaDB service
+#      become: yes
+#      service: name=mariadb state=started enabled=yes
 #can write daemon to automatically start up if server goes down (etc/init)
 
-    - name: Copy mariadb_answers to temp directory
-      template: src=db/mariadb_answers.txt dest=/tmp/mariadb_answers.txt mode=0644
+#    - name: Copy mariadb_answers to temp directory
+#      template: src=db/mariadb_answers.txt dest=/tmp/mariadb_answers.txt mode=0644
 
-    - name: Populate answers to secure installation
-      become: yes
-      shell: /usr/bin/mysql_secure_installation < /tmp/mariadb_answers.txt
+#    - name: Populate answers to secure installation
+#      become: yes
+#      shell: /usr/bin/mysql_secure_installation < /tmp/mariadb_answers.txt
 
     - name: Unpack archive in home
       unarchive: src=db/db.tgz dest=~/ mode=0755

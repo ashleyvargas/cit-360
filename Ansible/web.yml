@@ -10,17 +10,18 @@
     db_username: curriculum
     db_port: 3306
     service_dir: /usr/share/nginx/{{ service_name }}
+    ansible_ssh_private_key_file: ~/.ssh/cit360.pem
   vars_files: 
     - secrets.yml
   tasks:
-    - name: change selinux mode to permissive
-      become: yes
-      lineinfile: dest=/etc/sysconfig/selinux regexp="^SELINUX=" line="SELINUX=permissive"
+#    - name: change selinux mode to permissive
+#      become: yes
+#      lineinfile: dest=/etc/sysconfig/selinux regexp="^SELINUX=" line="SELINUX=permissive"
 # **
 
-    - name: Set permissive mode
-      become: yes
-      command: setenforce 0
+#    - name: Set permissive mode
+#      become: yes
+#      command: setenforce 0
 
     - name: Install EPEL
       become: yes

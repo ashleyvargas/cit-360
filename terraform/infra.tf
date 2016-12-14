@@ -4,7 +4,7 @@
 variable "vpc_id" {
   type = "string"
   description = "VPC ID for usage throughout the build process"
-  default = "vpc-b2f407d5"
+  default = "vpc-7417c913"
 }
 
 variable "db_password" {}
@@ -40,7 +40,7 @@ resource "aws_route_table" "public_routing_table" {
 
 resource "aws_subnet" "public_subnet_a" {
     vpc_id = "${var.vpc_id}"
-    cidr_block = "172.31.15.0/24"
+    cidr_block = "10.0.15.0/24"
     map_public_ip_on_launch = true
     availability_zone = "us-west-2a"
 
@@ -51,7 +51,7 @@ resource "aws_subnet" "public_subnet_a" {
 
 resource "aws_subnet" "public_subnet_b" {
     vpc_id = "${var.vpc_id}"
-    cidr_block = "172.31.16.0/24"
+    cidr_block = "10.0.16.0/24"
     map_public_ip_on_launch = true
     availability_zone = "us-west-2b"
 
@@ -62,7 +62,7 @@ resource "aws_subnet" "public_subnet_b" {
 
 resource "aws_subnet" "public_subnet_c" {
     vpc_id = "${var.vpc_id}"
-    cidr_block = "172.31.17.0/24"
+    cidr_block = "10.0.17.0/24"
     map_public_ip_on_launch = true
     availability_zone = "us-west-2c"
 
@@ -76,7 +76,7 @@ resource "aws_subnet" "public_subnet_c" {
 
 resource "aws_subnet" "private_subnet_a" {
     vpc_id = "${var.vpc_id}"
-    cidr_block = "172.31.0.0/22"
+    cidr_block = "10.0.0.0/22"
     availability_zone = "us-west-2a"
 
     tags {
@@ -86,7 +86,7 @@ resource "aws_subnet" "private_subnet_a" {
 
 resource "aws_subnet" "private_subnet_b" {
     vpc_id = "${var.vpc_id}"
-    cidr_block = "172.31.5.0/22"
+    cidr_block = "10.0.5.0/22"
     availability_zone = "us-west-2b"
 
     tags {
@@ -96,7 +96,7 @@ resource "aws_subnet" "private_subnet_b" {
 
 resource "aws_subnet" "private_subnet_c" {
     vpc_id = "${var.vpc_id}"
-    cidr_block = "172.31.10.0/22"
+    cidr_block = "10.0.10.0/22"
     availability_zone = "us-west-2c"
 
     tags {
@@ -178,7 +178,7 @@ resource "aws_security_group" "allow_local" {
       to_port = 22
       protocol = "tcp"
      cidr_blocks = ["0.0.0.0/0"]
- #     cidr_blocks = ["172.31.0.0/16"]
+ #     cidr_blocks = ["10.0.0.0/16"]
   #    cidr_blocks = ["130.166.220.26/16"]
   }
 
@@ -229,7 +229,7 @@ resource "aws_security_group" "db_security" {
       to_port = 3306
       protocol = "tcp"
  #    cidr_blocks = ["0.0.0.0/0"]
-      cidr_blocks = ["172.31.0.0/16"]
+      cidr_blocks = ["10.0.0.0/16"]
   }
 
   tags {
@@ -283,7 +283,7 @@ resource "aws_security_group" "asmt3_instances" {
       from_port = 22
       to_port = 22
       protocol = "tcp"
-      cidr_blocks = ["172.31.0.0/16"]
+      cidr_blocks = ["10.0.0.0/16"]
       cidr_blocks = ["130.166.220.26/16"]
   }
 
@@ -291,7 +291,7 @@ resource "aws_security_group" "asmt3_instances" {
       from_port = 80
       to_port = 80
       protocol = "tcp"
-      cidr_blocks = ["172.31.0.0/16"]
+      cidr_blocks = ["10.0.0.0/16"]
   }
   egress {
     from_port = 0

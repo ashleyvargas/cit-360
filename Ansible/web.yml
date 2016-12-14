@@ -27,9 +27,13 @@
       become: yes
       yum: name=epel-release update_cache=yes state=present
 
-    - name: Install packages
+    - name: Install PHP 5.4
       become: yes
-      yum: name=nginx,php,php-fpm,php-ldap,php-mbstring,php-mcrypt,php-mysql,php-phpunit-PHPUnit update_cache=yes state=present
+      shell: yes | yum install php54 php54-fpm php54-ldap php54-mbstring php54-mcrypt php54-pdo
+
+    - name: nginx
+      become: yes
+      yum: name=nginx update_cache=yes state=present
       register: nginx_install
 
     - name: Download composer

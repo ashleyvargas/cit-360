@@ -6,6 +6,9 @@
     - secrets.yml
   tasks:
 
+    -name: include vars
+    include_vars: secrets.yml
+
     - name: Copy MariaDB file remote to local
       become: yes
       copy: src=db/MariaDB.repo dest=/etc/yum.repos.d/MariaDB.repo mode=0644
@@ -27,6 +30,7 @@
 #      shell: /usr/bin/mysql_secure_installation < /tmp/mariadb_answers.txt
 
     - name: Unpack archive in home
+      become: yes
       unarchive: src=db/db.tgz dest=~/ mode=0755
 
     - name: Create database
